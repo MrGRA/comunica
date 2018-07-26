@@ -17,6 +17,7 @@
     "files-cais:config/sets/resolve-file.json",
     "files-cais:config/sets/resolve-hypermedia.json",
     "files-cais:config/sets/resolve-sparql.json",
+    "files-cais:config/sets/resolve-traverselinks.json",
     "files-cais:config/sets/sparql-init.json",
     "files-cais:config/sets/sparql-parsers.json",
     "files-cais:config/sets/sparql-queryoperators.json",
