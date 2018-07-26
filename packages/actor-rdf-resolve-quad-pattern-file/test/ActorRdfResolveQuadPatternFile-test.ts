@@ -1,10 +1,11 @@
 import {ActorRdfResolveQuadPattern} from "@comunica/bus-rdf-resolve-quad-pattern";
 import {Bus} from "@comunica/core";
+import "jest-rdf";
+import {Store as N3Store} from "n3";
 import {ActorRdfResolveQuadPatternFile} from "../lib/ActorRdfResolveQuadPatternFile";
 const arrayifyStream = require('arrayify-stream');
 const quad = require('rdf-quad');
 const streamifyArray = require('streamify-array');
-const N3Store = require('n3').Store;
 
 describe('ActorRdfResolveQuadPatternFile', () => {
   let bus;
@@ -131,15 +132,15 @@ describe('ActorRdfResolveQuadPatternFile', () => {
       const pattern = quad('?', '?', '?');
       return actor.run({ pattern, context: { sources: [{ type: 'file', value: 'abc'  }] } }).then(async (output) => {
         expect(await output.metadata()).toEqual({ totalItems: 8 });
-        expect(await arrayifyStream(output.data)).toEqual([
-          quad('s1', 'p1', 'o2'),
+        expect(await arrayifyStream(output.data)).toEqualRdfQuadArray([
           quad('s1', 'p1', 'o1'),
-          quad('s1', 'p2', 'o2'),
+          quad('s1', 'p1', 'o2'),
           quad('s1', 'p2', 'o1'),
-          quad('s2', 'p1', 'o2'),
+          quad('s1', 'p2', 'o2'),
           quad('s2', 'p1', 'o1'),
-          quad('s2', 'p2', 'o2'),
+          quad('s2', 'p1', 'o2'),
           quad('s2', 'p2', 'o1'),
+          quad('s2', 'p2', 'o2'),
         ]);
       });
     });
@@ -148,11 +149,11 @@ describe('ActorRdfResolveQuadPatternFile', () => {
       const pattern = quad('s1', '?', '?');
       return actor.run({ pattern, context: { sources: [{ type: 'file', value: 'abc'  }] } }).then(async (output) => {
         expect(await output.metadata()).toEqual({ totalItems: 4 });
-        expect(await arrayifyStream(output.data)).toEqual([
-          quad('s1', 'p1', 'o2'),
+        expect(await arrayifyStream(output.data)).toEqualRdfQuadArray([
           quad('s1', 'p1', 'o1'),
-          quad('s1', 'p2', 'o2'),
+          quad('s1', 'p1', 'o2'),
           quad('s1', 'p2', 'o1'),
+          quad('s1', 'p2', 'o2'),
         ]);
       });
     });
@@ -161,7 +162,7 @@ describe('ActorRdfResolveQuadPatternFile', () => {
       const pattern = quad('s3', '?', '?');
       return actor.run({ pattern, context: { sources: [{ type: 'file', value: 'abc'  }] } }).then(async (output) => {
         expect(await output.metadata()).toEqual({ totalItems: 0 });
-        expect(await arrayifyStream(output.data)).toEqual([]);
+        expect(await arrayifyStream(output.data)).toEqualRdfQuadArray([]);
       });
     });
 
