@@ -2,7 +2,6 @@ import {ActorRdfSerializeFixedMediaTypes, IActionRdfSerialize,
   IActorRdfSerializeFixedMediaTypesArgs, IActorRdfSerializeOutput} from "@comunica/bus-rdf-serialize";
 import {StreamWriter} from "n3";
 import * as RDF from "rdf-js";
-import * as RdfString from "rdf-string";
 import {Readable} from "stream";
 
 /**
@@ -21,7 +20,7 @@ export class ActorRdfSerializeN3 extends ActorRdfSerializeFixedMediaTypes {
     };
 
     action.quads.on('error', (e) => data.emit('error', e));
-    action.quads.on('data', (quad: RDF.Quad) => n3Triples.push(RdfString.quadToStringQuad(quad)));
+    action.quads.on('data', (quad: RDF.Quad) => n3Triples.push(quad));
     action.quads.on('end', () => n3Triples.emit('end'));
     const data = n3Triples.pipe(new StreamWriter({ format: mediaType }));
 
