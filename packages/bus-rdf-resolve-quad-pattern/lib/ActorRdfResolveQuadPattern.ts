@@ -43,6 +43,12 @@ export interface IActionRdfResolveQuadPattern extends IAction {
    * in which the pattern should be resolved.
    */
   context?: {[id: string]: any};
+  /**
+   * If errors should be ignored,
+   * and should be seen as empty responses.
+   * Types of errors include things such as parsing or HTTP errors.
+   */
+  silenceErrors?: boolean;
 }
 
 export interface IActorRdfResolveQuadPatternOutput extends IActorOutput {

@@ -24,8 +24,8 @@ export class ActorRdfResolveQuadPatternFile extends ActorRdfResolveQuadPatternSo
     super(args);
   }
 
-  public initializeFile(file: string): Promise<any> {
-    return this.stores[file] = this.mediatorRdfDereference.mediate({ url: file })
+  public initializeFile(file: string, silenceErrors?: boolean): Promise<any> {
+    return this.stores[file] = this.mediatorRdfDereference.mediate({ url: file, silenceErrors })
       .then((page: IActorRdfDereferenceOutput) => new Promise((resolve, reject) => {
         const store: any = new N3Store();
         page.quads.on('data', (quad) => store.addTriple(quadToStringQuad(quad)));
@@ -47,10 +47,10 @@ export class ActorRdfResolveQuadPatternFile extends ActorRdfResolveQuadPatternSo
     return true;
   }
 
-  protected async getSource(context?: {[id: string]: any}): Promise<ILazyQuadSource> {
+  protected async getSource(context?: {[id: string]: any}, silenceErrors?: boolean): Promise<ILazyQuadSource> {
     const file: string = context.sources[0].value;
     if (!this.stores[file]) {
-      await this.initializeFile(file);
+      await this.initializeFile(file, silenceErrors);
     }
     return new N3StoreQuadSource(await this.stores[file]);
   }
